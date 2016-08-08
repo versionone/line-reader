@@ -14,15 +14,19 @@ Usage
 -----
 
 The `eachLine` function reads each line of the given file.  Upon each new line,
-the given callback function is called with two parameters: the line read and a
-boolean value specifying whether the line read was the last line of the file.
+the given callback function is called with an event descriptor, containing
+
+ - `line`: the line read
+ - `offset`: the number of bytes read from the file through the end of this line
+ - `last`: a boolean value specifying whether this line is the last line of the file
+
 If the callback returns `false`, reading will stop and the file will be closed.
 
 ```javascript
 var lineReader = require('line-reader');
 
-lineReader.eachLine('file.txt', function(line, last) {
-  console.log(line);
+lineReader.eachLine('file.txt', function(event) {
+  console.log(event.line);
 
   if (/* done */) {
     return false; // stop reading
@@ -30,14 +34,14 @@ lineReader.eachLine('file.txt', function(line, last) {
 });
 ```
 
-`eachLine` can also be used in an asynchronous manner by providing a third
+`eachLine` can also be used in an asynchronous manner by providing a second
 callback parameter like so:
 
 ```javascript
 var lineReader = require('line-reader');
 
-lineReader.eachLine('file.txt', function(line, last, cb) {
-  console.log(line);
+lineReader.eachLine('file.txt', function(event, cb) {
+  console.log(event.line);
 
   if (/* done */) {
     cb(false); // stop reading
@@ -55,8 +59,8 @@ by returning `false` from the iteratee):
 var lineReader = require('line-reader');
 
 // read all lines:
-lineReader.eachLine('file.txt', function(line) {
-  console.log(line);
+lineReader.eachLine('file.txt', function(event) {
+  console.log(event.line);
 }).then(function (err) {
   if (err) throw err;
   console.log("I'm done!!");
@@ -98,8 +102,8 @@ You may provide additional options in a hash before the callbacks to `eachLine` 
 For example:
 
 ```javascript
-lineReader.eachLine('file.txt', {separator: ';', encoding: 'utf8'}, function(line, last, cb) {
-  console.log(line);
+lineReader.eachLine('file.txt', {separator: ';', encoding: 'utf8'}, function(event, cb) {
+  console.log(event.line);
 });
 lineReader.open('file.txt', {bufferSize: 1024}, function(err, reader) {
   ...
@@ -113,11 +117,11 @@ Both `eachLine` and `open` support passing either a file name or a read stream:
 
 ```javascript
 // reading from stdin
-lineReader.eachLine(process.stdin, function(line) {});
+lineReader.eachLine(process.stdin, function(event) {});
 
 // reading with file position boundaries
 var readStream = fs.createReadStream('test.log', { start: 0, end: 10000 });
-lineReader.eachLine(readStream, function(line) {});
+lineReader.eachLine(readStream, function(event) {});
 ```
 
 Note however that if you're reading user input from stdin then the
@@ -133,8 +137,8 @@ var lineReader = require('line-reader'),
     Promise = require('bluebird');
 
 var eachLine = Promise.promisify(lineReader.eachLine);
-eachLine('file.txt', function(line) {
-  console.log(line);
+eachLine('file.txt', function(event) {
+  console.log(event.line);
 }).then(function() {
   console.log('done');
 }).catch(function(err) {
@@ -159,8 +163,8 @@ var eachLine = function(filename, options, iteratee) {
     });
   });
 }
-eachLine('file.txt', function(line) {
-  console.log(line);
+eachLine('file.txt', function(event) {
+  console.log(event.line);
 }).then(function() {
   console.log('done');
 }).catch(function(err) {

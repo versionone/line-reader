@@ -1,6 +1,6 @@
 {
   "name": "@versionone/line-reader",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Asynchronous, buffered, line-by-line file/stream reader",
   "url": "https://github.com/versionone/line-reader",
   "keywords": [
