@@ -1,7 +1,6 @@
 Line Reader
 ===========
-[![npm version](https://img.shields.io/npm/v/line-reader.svg)](https://www.npmjs.com/package/line-reader)
-[![Downloads/month](https://img.shields.io/npm/dm/line-reader.svg)](https://www.npmjs.com/package/line-reader)
+_Based on original work by Nick Ewing (https://github.com/nickewing/line-reader)_
 
 Asynchronous, buffered, line-by-line file/stream reader with support for
 user-defined line separators.
@@ -9,7 +8,7 @@ user-defined line separators.
 Install
 -------
 
-`npm install line-reader`
+`npm install versionone/line-reader`
 
 Usage
 -----
